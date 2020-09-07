@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import Ingredient from '../components/Ingredient.js'
 
@@ -94,7 +95,7 @@ const StyledOutLink = styled.div`
 `
 
 
-const Recipe = ({ recipe, menu, setMenu, shoppingList, setShoppingList }) => {
+const Recipe = ({ recipe, menu, setMenu, shoppingList, setShoppingList, gotList, setGotList }) => {
     const [showIngredients, setShowIngredients] = useState(false)
     
     const addToMenu = (recipe) => {
@@ -102,6 +103,8 @@ const Recipe = ({ recipe, menu, setMenu, shoppingList, setShoppingList }) => {
         setMenu(newMenu)
     }
 
+    if (recipe.length < 1) return <Redirect to="/" />
+    
     return (
         <StyledRecipe>
             <StyledHeroImage image={recipe.image} />
@@ -122,15 +125,15 @@ const Recipe = ({ recipe, menu, setMenu, shoppingList, setShoppingList }) => {
             </StyledAddToMenuButton>
             <StyledIngredientsList>
                 Ingredients ({recipe.ingredientLines.length}) <span onClick={() => setShowIngredients(!showIngredients)}>{showIngredients ? "HIDE" : "SHOW"}</span>
-                {showIngredients && recipe.ingredientLines.map(ingred => <Ingredient item={ingred} recipeName={recipe.label} recipeURI={recipe.uri} key={ingred + recipe.uri} shoppingList={shoppingList} setShoppingList={setShoppingList} />)}
+                {showIngredients && recipe.ingredientLines.map(ingred => <Ingredient item={ingred} recipeName={recipe.label} recipeURI={recipe.uri} key={ingred + recipe.uri} shoppingList={shoppingList} setShoppingList={setShoppingList} gotList={gotList} setGotList={setGotList} />)}
             </StyledIngredientsList>
             <StyledOutLink>
                 <a href={recipe.url} target="_blank" rel="noopener noreferrer">
                     View the full recipe at {recipe.source}
                 </a>
             </StyledOutLink>
-        </StyledRecipe>
-    )
+        </StyledRecipe> 
+    ) 
 }
 
 export default Recipe

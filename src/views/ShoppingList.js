@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ShoppingList = () => {
+const ShoppingList = ( { shoppingList }) => {
     return (
-        <div>ShoppingList</div>
+        <div>
+            ShoppingList
+            {shoppingList.map(item => <div>{item.item}</div>)}
+        </div>
     )
 }
 

@@ -30,6 +30,7 @@ const App = () => {
   const [recipe, setRecipe] = useState([])
   const [menu, setMenu] = useState([])
   const [shoppingList, setShoppingList] = useState([])
+  const [gotList, setGotList] = useState([])
   
   const APP_ID = "ca6309c7"
   const APP_KEY = "749a2a1bbb37412141cf0dd5b7976632"
@@ -68,7 +69,7 @@ const App = () => {
             <ShoppingList shoppingList={shoppingList} />
           </Route>
           <Route path="/recipe">
-            <Recipe recipe={recipe} setShoppingList={setShoppingList} menu={menu} setMenu={setMenu} shoppingList={shoppingList} />
+            <Recipe recipe={recipe} setShoppingList={setShoppingList} menu={menu} setMenu={setMenu} shoppingList={shoppingList} gotList={gotList} setGotList={setGotList} />
           </Route>
           <Route path="/menu">
             <Menu menu={menu} />

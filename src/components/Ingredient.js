@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 const StyledIngredient = styled.div`
@@ -34,29 +34,28 @@ const StyledIngredient = styled.div`
 
 `
 
-const Ingredient = ({ item, recipeName, recipeURI, shoppingList, setShoppingList }) => {
-    const [gotIt, setGotIt] = useState(false)
-    const [needIt, setNeedIt] = useState(false)
+const Ingredient = ({ item, recipeName, recipeURI, shoppingList, setShoppingList, gotList, setGotList }) => {
+    
+    const inBag = () => {
+        return shoppingList.filter(inList => inList.item === item && inList.recipeName === recipeName && inList.recipeURI === recipeURI)
+    }
+    const gotIt = () => {
+        return gotList.filter(inList => inList.item === item && inList.recipeName === recipeName && inList.recipeURI === recipeURI)
+    }
 
     const toggleGot = () => {
-        if (needIt) alterShoppingList()
-        setGotIt(!gotIt)
-        setNeedIt(false)
+        if (inBag()) removeFromShoppingList({item, recipeName, recipeURI})
+        if (gotIt().length === 0) addToGotList({item, recipeName, recipeURI})
+        else removeFromGotList({item, recipeName, recipeURI})
     }
 
     const toggleNeed = () => {
-        alterShoppingList()
-        setGotIt(false)
-        setNeedIt(!needIt)
-    }
-
-    const alterShoppingList = () => {
-        if (!needIt) addToShoppingList({item, recipeName, recipeURI})
-        if (needIt) removeFromShoppingList({item, recipeName, recipeURI})
+        if (inBag().length === 0) addToShoppingList({item, recipeName, recipeURI})
+        else removeFromShoppingList({item, recipeName, recipeURI})
+        if (gotIt()) removeFromGotList({item, recipeName, recipeURI})
     }
 
     const addToShoppingList = (ingredient) => {
-        console.log('adding', ingredient)
         const newList = [...shoppingList, ingredient]
         setShoppingList(newList)
     }
@@ -66,11 +65,21 @@ const Ingredient = ({ item, recipeName, recipeURI, shoppingList, setShoppingList
         setShoppingList(newList)
     }
 
+    const addToGotList = (ingredient) => {
+        const newList = [...gotList, ingredient]
+        setGotList(newList)
+    }
+
+    const removeFromGotList = (ingredient) => {
+        const newList = [...gotList].filter(inList => JSON.stringify(inList) !== JSON.stringify(ingredient))
+        setGotList(newList)
+    }
+
     return (
         <StyledIngredient>
             <div><span>{item}</span></div>
-            <div><img alt="Got It!" onClick={toggleGot} src={gotIt ? "/images/selectedThumb.svg" : "/images/thumb.svg"} /></div>
-            <div><img alt="Need It!" onClick={toggleNeed} src={needIt ? "/images/selectedBag.svg" : "/images/bag.svg"} /></div>
+            <div><img alt="Got It!" onClick={toggleGot} src={gotIt().length > 0 ? "/images/selectedThumb.svg" : "/images/thumb.svg"} /></div>
+            <div><img alt="Need It!" onClick={toggleNeed} src={inBag().length > 0 ? "/images/selectedBag.svg" : "/images/bag.svg"} /></div>
         </StyledIngredient>
     )
 }
