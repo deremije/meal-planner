@@ -10,6 +10,7 @@ import NavBar from './components/NavBar.js'
 import styled from 'styled-components'
 
 const StyledContainer = styled.div`
+  font-family: "Roboto", sans-serif;
   width: 100vw;
   height: 100vh;
   max-height: 896px;
@@ -31,6 +32,7 @@ const App = () => {
   const [menu, setMenu] = useState([])
   const [shoppingList, setShoppingList] = useState([])
   const [gotList, setGotList] = useState([])
+  const [pageTitle, setPageTitle] = useState("Search")
   
   const APP_ID = "ca6309c7"
   const APP_KEY = "749a2a1bbb37412141cf0dd5b7976632"
@@ -59,22 +61,23 @@ const App = () => {
   return (
     <StyledContainer>
       <BrowserRouter>
-        <NavBar menu={menu} setRecipe={setRecipe} shoppingList={shoppingList} />
         <Switch>
           <Route exact path="/">
             <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} results={results} />
-            {results && <SearchResults results={results} searchTerm={searchTerm} setRecipe={setRecipe} getMoreRecipes={getMoreRecipes} menu={menu} />}
+            {results && <SearchResults setPageTitle={setPageTitle} results={results} searchTerm={searchTerm} setRecipe={setRecipe} getMoreRecipes={getMoreRecipes} menu={menu} />}
           </Route>
           <Route path="/list">
-            <ShoppingList shoppingList={shoppingList} />
+            <ShoppingList setPageTitle={setPageTitle} shoppingList={shoppingList} setShoppingList={setShoppingList} gotList={gotList} setGotList={setGotList} />
           </Route>
           <Route path="/recipe">
-            <Recipe recipe={recipe} setShoppingList={setShoppingList} menu={menu} setMenu={setMenu} shoppingList={shoppingList} gotList={gotList} setGotList={setGotList} />
+            <Recipe setPageTitle={setPageTitle} recipe={recipe} setShoppingList={setShoppingList} menu={menu} setMenu={setMenu} shoppingList={shoppingList} gotList={gotList} setGotList={setGotList} />
           </Route>
           <Route path="/menu">
-            <Menu menu={menu} />
+            <Menu setPageTitle={setPageTitle} menu={menu} setRecipe={setRecipe} shoppingList={shoppingList} />
           </Route>
         </Switch>
+        <NavBar pageTitle={pageTitle} menu={menu} setRecipe={setRecipe} shoppingList={shoppingList} />
+        
       </BrowserRouter>
     </StyledContainer>
   )

@@ -5,9 +5,9 @@ import Result from '../components/Result.js'
 
 const StyledSearchResults = styled.div`
     width: calc(100% - 20px);
-    height: calc(100% - 140px);
-    padding: 0 10px 10px 10px;
-    margin-top: -20px;
+    height: calc(100% - 130px);
+    padding: 10px 10px 0px 10px;
+    margin-top: 30px;
     overflow-x: hidden;
     overflow-y: auto;
     p {
@@ -19,12 +19,16 @@ const StyledSearchResults = styled.div`
 
 
 
-const SearchResults = ({ results, searchTerm, setRecipe, getMoreRecipes, menu }) => {
+const SearchResults = ({ setPageTitle, results, searchTerm, setRecipe, getMoreRecipes, menu }) => {
     const [fetching, setFetching] = useState(false)
     
     useEffect(() => {
         setFetching(false)
     }, [results])
+
+    useEffect(() => {
+        setPageTitle("Search")
+    }, [])
 
     const containerRef = useRef(null)
 
@@ -37,9 +41,6 @@ const SearchResults = ({ results, searchTerm, setRecipe, getMoreRecipes, menu })
 
     return (
         <StyledSearchResults ref={containerRef} onScroll={checkPosition}>
-            <p>
-                for "{searchTerm}"
-            </p>
             {results.map(result => <Link to="/recipe" key={JSON.stringify(result)}><Result setRecipe={setRecipe} result={result}  menu={menu} /></Link>)}
         </StyledSearchResults>
     )

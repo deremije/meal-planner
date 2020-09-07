@@ -5,12 +5,12 @@ const StyledSearchForm = styled.form`
     display: ${props => props.results ? "grid" : "block"};
     grid-template-columns: 1fr 100px;
     position: absolute;
-    bottom: 0px;
+    bottom: -5px;
     transform: ${props => props.results ? "" : "translateY(-50%)"};
     width: calc(100% - 40px);
-    margin: 0 20px; 
-    padding: ${props => props.results ? "14px 0 10px" : "100% 10px 0"};
+    padding: ${props => props.results ? "8px 20px 8px" : "100% 30px 0"};
     transition: all 300ms linear;
+    background-color: ${props => props.results ? "#275386" : "transparent"};
     & input[type="text"] {
         width: ${props => props.results ? "calc(100% - 40px)" : "calc(100% - 30px)"};
         position: relative;

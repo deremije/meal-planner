@@ -60,7 +60,7 @@ const StyledResult = styled.div`
 
 const Result = ({ result, setRecipe, menu }) => {
     return (
-        <StyledResult onClick={() => setRecipe(result.recipe)}>
+        <StyledResult onClick={() => setRecipe(result)}>
             <HeroImage image={result.recipe.image} />
             <InfoBar>
                 {result.recipe.yield ?

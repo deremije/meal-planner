@@ -3,12 +3,18 @@ import styled from 'styled-components'
 import { Link } from "react-router-dom"
 
 const StyledNav = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
     width: calc(100% - 20px);
-    padding: 10px;
+    padding: 10px 10px 0;
+    margin-bottom: 10px;
     height: 48px;
     line-height: 48px;
     display: grid;
     grid-template-columns: 1fr 40px 40px 40px;
+    background-color: #275386;
+    color: white;
     h3 {
         font-size: 24px;
         padding: 0;
@@ -39,10 +45,10 @@ const StyledNav = styled.div`
     }
 `
 
-const NavBar = ({ menu, setRecipe, shoppingList, setViewList }) => {
+const NavBar = ({ menu, setRecipe, shoppingList, setViewList, pageTitle }) => {
     return (
         <StyledNav>
-            <h3>Search Results</h3>
+            <h3>{pageTitle}</h3>
             <Link to="/">
                 <img src="/images/search.png" alt="Search" />
             </Link>

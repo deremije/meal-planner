@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import Ingredient from '../components/Ingredient.js'
@@ -6,7 +6,7 @@ import Ingredient from '../components/Ingredient.js'
 const StyledRecipe = styled.div`
     width: calc(100% - 20px);
     height: auto;
-    margin: 10px;
+    margin: 65px 10px 10px;
     overflow-y: auto;
 `
 const StyledHeroImage = styled.div`
@@ -61,17 +61,17 @@ const StyledLabels = styled.div`
 
 `
 const StyledAddToMenuButton = styled.button`
-    width: auto;
-    padding: 5px;
+    width: 100%;
+    padding: 5px 0;
     line-height: 30px;
     font-size: 18px;
     background-color: #43AFEC;
     display: block;
-    margin: ${props => props.showButton ? "20px 0" : ""};
+    margin: 20px 0;
     transition: all 300ms ease-in-out;
     position: relative;
     left: 50%;
-    transform: ${props => props.showButton ? "translateX(-50%)" : "scaleY(0)"};
+    transform: translateX(-50%);
 `
 const StyledIngredientsList = styled.div`
     font-size: 24px;
@@ -95,11 +95,15 @@ const StyledOutLink = styled.div`
 `
 
 
-const Recipe = ({ recipe, menu, setMenu, shoppingList, setShoppingList, gotList, setGotList }) => {
+const Recipe = ({ setPageTitle, recipe, menu, setMenu, shoppingList, setShoppingList, gotList, setGotList }) => {
     const [showIngredients, setShowIngredients] = useState(false)
     
-    const addToMenu = (recipe) => {
-        const newMenu = [...menu, recipe]
+    useEffect(() => {
+        setPageTitle("Recipe")
+    }, [])
+
+    const updateMenu = (recipe) => {
+        const newMenu = menu.includes(recipe) ? [...menu].filter(item => JSON.stringify(item) !== JSON.stringify(recipe)) : [...menu, recipe]
         setMenu(newMenu)
     }
 
@@ -107,29 +111,29 @@ const Recipe = ({ recipe, menu, setMenu, shoppingList, setShoppingList, gotList,
     
     return (
         <StyledRecipe>
-            <StyledHeroImage image={recipe.image} />
+            <StyledHeroImage image={recipe.recipe.image} />
             <StyledRecipeName>
-                {menu.includes(recipe) && <img src="/images/menu.png" alt="Recipe is part of My Menu" />} {recipe.label}
+                {menu.includes(recipe) && <img src="/images/menu.png" alt="Recipe is part of My Menu" />} {recipe.recipe.label}
             </StyledRecipeName>
             <StyledDataPoints>
-                {recipe.totalTime ? <StyledTime>{recipe.totalTime} minutes</StyledTime> : ''}
-                {recipe.yield ? <StyledServings>Serves {recipe.yield}</StyledServings> : ''}
+                {recipe.recipe.totalTime ? <StyledTime>{recipe.recipe.totalTime} minutes</StyledTime> : ''}
+                {recipe.recipe.yield ? <StyledServings>Serves {recipe.recipe.yield}</StyledServings> : ''}
                 <StyledLabels>
-                    {recipe.dietLabels.map(label => <div key={label}><span style={{"backgroundColor": "#43AFEC"}}></span> {label}</div>)}
-                    {recipe.healthLabels.map(label => <div key={label}><span style={{"backgroundColor": "#3BB004"}}></span> {label}</div>)}
-                    {recipe.cautions.map(label => <div key={label}><span style={{"backgroundColor": "#EC7272"}}></span> {label}</div>)}
+                    {recipe.recipe.dietLabels.map(label => <div key={label}><span style={{"backgroundColor": "#43AFEC"}}></span> {label}</div>)}
+                    {recipe.recipe.healthLabels.map(label => <div key={label}><span style={{"backgroundColor": "#3BB004"}}></span> {label}</div>)}
+                    {recipe.recipe.cautions.map(label => <div key={label}><span style={{"backgroundColor": "#EC7272"}}></span> {label}</div>)}
                 </StyledLabels>
             </StyledDataPoints>
-            <StyledAddToMenuButton showButton={!menu.includes(recipe)} onClick={() => addToMenu(recipe)}>
-                + Add to My Menu
+            <StyledAddToMenuButton onClick={() => updateMenu(recipe)}>
+                {menu.includes(recipe) ? "Remove from My Menu" : "+ Add to My Menu" }
             </StyledAddToMenuButton>
             <StyledIngredientsList>
-                Ingredients ({recipe.ingredientLines.length}) <span onClick={() => setShowIngredients(!showIngredients)}>{showIngredients ? "HIDE" : "SHOW"}</span>
-                {showIngredients && recipe.ingredientLines.map(ingred => <Ingredient item={ingred} recipeName={recipe.label} recipeURI={recipe.uri} key={ingred + recipe.uri} shoppingList={shoppingList} setShoppingList={setShoppingList} gotList={gotList} setGotList={setGotList} />)}
+                Ingredients ({recipe.recipe.ingredientLines.length}) <span onClick={() => setShowIngredients(!showIngredients)}>{showIngredients ? "HIDE" : "SHOW"}</span>
+                {showIngredients && recipe.recipe.ingredientLines.map(ingred => <Ingredient item={ingred} recipeName={recipe.recipe.label} recipeURI={recipe.recipe.uri} key={ingred + recipe.recipe.uri} shoppingList={shoppingList} setShoppingList={setShoppingList} gotList={gotList} setGotList={setGotList} />)}
             </StyledIngredientsList>
             <StyledOutLink>
-                <a href={recipe.url} target="_blank" rel="noopener noreferrer">
-                    View the full recipe at {recipe.source}
+                <a href={recipe.recipe.url} target="_blank" rel="noopener noreferrer">
+                    View the full recipe at {recipe.recipe.source}
                 </a>
             </StyledOutLink>
         </StyledRecipe> 
